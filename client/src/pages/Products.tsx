@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { categoriesData, dummyProducts } from "../assets/assets";
 import { ChevronDown, Home, SlidersHorizontal } from "lucide-react";
+import Loading from "../components/Loading";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -164,7 +165,7 @@ const Products = () => {
             </div>
             {/* Product Grid */}
             {loading ? (
-              <p>Loading...</p>
+              <Loading />  
             ) : products.length === 0 ? (
               <div className="text-center py-16">
                 <p className="text-lg font-semibold text-app-green mb-2">
