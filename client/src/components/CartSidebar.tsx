@@ -155,7 +155,7 @@ const CartSidebar = () => {
                 setIsCartOpen(false);
                 window.scrollTo(0, 0);
               }}
-              className="w-full bg-app-green text-white py-3 rounded-xl font-semibold hover:bg-app-green/90 transition-colors"
+              className="w-full py-3 bg-app-orange text-white font-semibold rounded-xl hover;bg-app-orange-dark transition-colors flex-center gap-2 active: scale-[0.98]"
             >
               Proceed to Checkout <ArrowRightIcon className="size-4" />
             </button>
