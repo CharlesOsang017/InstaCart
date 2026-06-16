@@ -20,18 +20,16 @@ const getAdminStatus = (email: string | null | undefined): boolean =>{
 
 // POST /api/auth/register
 export const register = async(req:Request, res:Response)=>{
-    try {
-        const {name, email, password} = req.body;
+    const {name, email, password} = req.body;
+    if(!name || !email || !password){
+        return res.status(400).json({message:"All fields are required"})
+    }
+    const existingUser = await prisma.user.findUnique({where:{email}})
+    if(existingUser){
+        return res.status(400).json({message:"User already exists"})
+    }
 
-        if(!name || !email || !password){
-            return res.status(400).json({message:"All fields are required"})
-        }
-        const existingUser = await prisma.user.findUnique({where:{email}})
-        if(existingUser){
-            return res.status(400).json({message:"User already exists with this  email"})
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await prisma.user.create({
             data:{
@@ -52,11 +50,35 @@ export const register = async(req:Request, res:Response)=>{
             user:userData
         })
 
-
-
-        
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({message:"Internal server error"})
-    }
 }
+
+// POST /api/auth/login
+export const login = async(req:Request, res:Response)=>{
+    
+        const {email, password} = req.body;
+
+        if(!email || !password){
+            return res.status(400).json({message:"All fields are required"})
+        }
+        const user = await prisma.user.findUnique({where:{email}})
+        if(!user){
+            return res.status(404).json({message:"User not found"})
+        }
+
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if(!isPasswordMatch){
+            return res.status(401).json({message:"Invalid email or password"})
+        }
+
+        const token = generateToken(user.id);
+        const userData: any = {...user}
+        delete userData.password;
+        userData.isAdmin = getAdminStatus(userData.email);
+
+        res.status(200).json({
+            message:"User logged in successfully",
+            token,
+            user:userData
+        })
+        
+    }
