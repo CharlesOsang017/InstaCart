@@ -4,6 +4,9 @@ import authRoutes from "./routes/auth.route.js";
 import productRoutes from "./routes/product.route.js";
 import cors from "cors";
 import uploadRoutes from "./routes/upload.route.js";
+import orderRoutes from "./routes/order.route.js";
+import { serve } from "inngest/express";
+import { inngest, functions } from "./inngest/index.js"
 
 const app = express();
 
@@ -15,6 +18,9 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/upload", uploadRoutes)
+app.use("/api/orders", orderRoutes)
+// Set up the "/api/inngest" (recommended) routes with the serve handler
+app.use("/api/inngest", serve({ client: inngest, functions }));
 
 const port = process.env.PORT || 5000;
 
