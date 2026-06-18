@@ -9,6 +9,8 @@ import { serve } from "inngest/express";
 import { inngest, functions } from "./inngest/index.js"
 import addressRoutes from "./routes/address.route.js";
 import adminRoutes from "./routes/admin.route.js";
+import deliveryPartnerRoutes from "./routes/deliveryPartner.route.js";
+
 
 const app = express();
 
@@ -24,6 +26,8 @@ app.use("/api/orders", orderRoutes)
 app.use("/api/addresses", addressRoutes)
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/admin", adminRoutes)
+app.use("/api/delivery", deliveryPartnerRoutes)
+
 const port = process.env.PORT || 5000;
 
 app.get('/', (req: Request, res: Response) => {
