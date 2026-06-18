@@ -19,7 +19,6 @@ app.use('/api/auth', authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/upload", uploadRoutes)
 app.use("/api/orders", orderRoutes)
-// Set up the "/api/inngest" (recommended) routes with the serve handler
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
 const port = process.env.PORT || 5000;
