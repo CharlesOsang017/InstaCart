@@ -7,6 +7,7 @@ import uploadRoutes from "./routes/upload.route.js";
 import orderRoutes from "./routes/order.route.js";
 import { serve } from "inngest/express";
 import { inngest, functions } from "./inngest/index.js"
+import addressRoutes from "./routes/address.route.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use('/api/auth', authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/upload", uploadRoutes)
 app.use("/api/orders", orderRoutes)
+app.use("/api/addresses", addressRoutes)
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
 const port = process.env.PORT || 5000;
