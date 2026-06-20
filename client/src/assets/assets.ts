@@ -112,7 +112,6 @@ export const iconsForLeafpad = {
 
 export const dummyProducts = [
     {
-        _id: "69c22613ae75a98c7cd13b3b",
         name: "Butter Croissant 100g",
         description: "Flaky and buttery",
         price: 45,
