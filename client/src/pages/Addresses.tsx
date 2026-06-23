@@ -45,7 +45,7 @@ const Addresses = () => {
       zip: addr.zip,
       isDefault: addr.isDefault,
     });
-    setEditingId(addr._id);
+    setEditingId(addr.id);
     setShowForm(true);
   };
   useEffect(() => {
@@ -99,7 +99,7 @@ const Addresses = () => {
           <div className="space-y-4">
             {addresses.map((add) => (
               <AddressCard
-                key={add._id}
+                key={add.id}
                 addr={add}
                 onEditHandler={onEditHandler}
                 setAddresses={setAddresses}
@@ -107,8 +107,7 @@ const Addresses = () => {
             ))}
           </div>
         )}
-      </div>    
-
+      </div>
     </div>
   );
 };

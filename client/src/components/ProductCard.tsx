@@ -8,14 +8,14 @@ interface Props {
 }
 const ProductCard = ({ product }: Props) => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
-  const { addToCart } = useCart()
+  const { addToCart } = useCart();
 
   const navigate = useNavigate();
 
   return (
     <div
       className="bg-white rounded-2xl overflow-hidden shadow hover:shadow-md transition-all duration-300 group animate-fade-in cursor-pointer"
-      onClick={() => navigate(`/products/${product?._id}`)}
+      onClick={() => navigate(`/products/${product?.id}`)}
     >
       {/* Image */}
       <div className="relative aspect-square overflow-hidden">
@@ -69,7 +69,13 @@ const ProductCard = ({ product }: Props) => {
               </span>
             )}
           </div>
-          <button onClick={(e) => {e.stopPropagation(); addToCart(product)}} className="size-7 rounded-full bg-app-orange text-white flex-center shrink-0 hover:bg-app-orange-dark transition-colors active:scale-95">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart(product);
+            }}
+            className="size-7 rounded-full bg-app-orange text-white flex-center shrink-0 hover:bg-app-orange-dark transition-colors active:scale-95"
+          >
             <Plus className="size-3.5" />
           </button>
         </div>

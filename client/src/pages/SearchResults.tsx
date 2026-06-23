@@ -47,16 +47,25 @@ const SearchResults = () => {
           <Loading />
         ) : products.length === 0 ? (
           <div className="text-center py-20">
-           <Search className="size-16 text-app-border mx-auto mb-4" />
-           <h2 className="text-xl font-semibold text-app-green mb-2">No Results found</h2>
-           <p className="text-sm text-app-text-light mb-6 max-w-md mx-auto">We couldn't find any products matchinh "{query}". Try a different search term.</p>
-           <Link to="/products" className=" hover:underline inline-flex px-5 py-2.5 bg-app-green.text-white.text-sm.font-medium.rounded-lg">
-           Brwose All Products</Link>
+            <Search className="size-16 text-app-border mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-app-green mb-2">
+              No Results found
+            </h2>
+            <p className="text-sm text-app-text-light mb-6 max-w-md mx-auto">
+              We couldn't find any products matchinh "{query}". Try a different
+              search term.
+            </p>
+            <Link
+              to="/products"
+              className=" hover:underline inline-flex px-5 py-2.5 bg-app-green.text-white.text-sm.font-medium.rounded-lg"
+            >
+              Brwose All Products
+            </Link>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         )}

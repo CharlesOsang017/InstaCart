@@ -10,7 +10,7 @@ const PopularProducts = () => {
 
   useEffect(() => {
     const fetchPopularProducts = async () => {
-      const response = await api.get(`/products?limit=10&sort=rating`);
+      const response = await api.get(`/products?sort=rating`);
       setProducts(response.data.products);
     };
     fetchPopularProducts();
@@ -33,8 +33,8 @@ const PopularProducts = () => {
           </Link>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 xl:gap-8">
-          {products?.map((product) => (
-            <ProductCard key={product?._id} product={product} />
+          {products?.slice(0, 10).map((product) => (
+            <ProductCard key={product?.id} product={product} />
           ))}
         </div>
       </div>

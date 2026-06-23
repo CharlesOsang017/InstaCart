@@ -45,7 +45,7 @@ const AddressCard = ({
           <PencilIcon className="size-4" />
         </button>
         <button
-          onClick={() => handleDelete(addr._id)}
+          onClick={() => handleDelete(addr.id)}
           className="p-2 text-app-text-light hover:text-app-error hover:bg-red-50 rounded-lg transition-colors"
         >
           <TrashIcon className="size-4" />
