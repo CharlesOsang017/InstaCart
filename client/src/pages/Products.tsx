@@ -2,10 +2,12 @@ import type { Product } from "../types";
 import ProductCard from "../components/ProductCard";
 import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { categoriesData, dummyProducts } from "../assets/assets";
+import { categoriesData} from "../assets/assets";
 import { ChevronDown, Home, SlidersHorizontal, XIcon } from "lucide-react";
 import Loading from "../components/Loading";
 import FilterPanel from "../components/FilterPanel";
+import api from "../config/api";
+import toast from "react-hot-toast";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,57 +25,25 @@ const Products = () => {
 
   const fetchProducts = async () => {
     setLoading(true);
-    let filteredProducts = [...dummyProducts];
+    try {
+      const params = new URLSearchParams();
+      if (category) params.set("category", category);
+      if (organic) params.set("organic", organic);
+      if (sort) params.set("sort", sort);
+      if (page) params.set("page", page.toString());
+      if (minPrice) params.set("minPrice", minPrice);
+      if (maxPrice) params.set("maxPrice", maxPrice);
+      
+      params.set("limit", "12");
 
-    // Category filter
-    if (category) {
-      filteredProducts = filteredProducts.filter(
-        (p) => p.category === category,
-      );
+      const response = await api.get(`/products?${params.toString()}`);
+      setProducts(response.data.products);
+      setTotalPages(response.data.totalPages);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to fetch products");
+    } finally {
+      setLoading(false);
     }
-
-    // Organic filter
-    if (organic === "true") {
-      filteredProducts = filteredProducts.filter((p) => p.isOrganic);
-    }
-
-    // Price range filter
-    if (minPrice) {
-      filteredProducts = filteredProducts.filter(
-        (p) => p.price >= Number(minPrice),
-      );
-    }
-    if (maxPrice) {
-      filteredProducts = filteredProducts.filter(
-        (p) => p.price <= Number(maxPrice),
-      );
-    }
-
-    // Sorting logic
-    switch (sort) {
-      case "price_asc":
-        filteredProducts.sort((a, b) => a.price - b.price);
-        break;
-      case "price_desc":
-        filteredProducts.sort((a, b) => b.price - a.price);
-        break;
-      case "rating":
-        filteredProducts.sort((a, b) => b.rating - a.rating);
-        break;
-      case "name":
-        filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      default:
-        // Newest (assuming createdAt exists and can be compared)
-        filteredProducts.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        );
-        break;
-    }
-
-    setProducts(filteredProducts);
-    setLoading(false);
   };
 
   // update filter
@@ -121,7 +91,7 @@ const Products = () => {
         </nav>
         <div className="flex gap-8 xl:px-10">
           {/* Sidebar - Desktop */}
-          <aside className="hidden lg:block w-64 shrink-10">
+          <aside className="hidden lg:block w-64 shrink-0">
             <div className="bg-white rounded-2xl p-4 sticky top-24">
               <FilterPanel
                 categories={categoriesData}

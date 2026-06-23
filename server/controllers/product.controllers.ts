@@ -16,34 +16,65 @@ export const getFlashDeals = async(req:Request, res:Response)=>{
 // GET/api/products/
 
 export const getProducts = async(req: Request, res: Response)=>{
-    const {category, search, minPrice, maxPrice, sort} = req.query;
+    const {category, search, minPrice, maxPrice, sort, organic, page = "1", limit = "12"} = req.query;
 
     const where: any = {};
 
     if(category && category  !== "all") where.category = category as string;
     if(search) where.name = {contains: search as string, mode: "insensitive"};
+    
+    if(organic === "true") where.isOrganic = true;
+
     if(minPrice || maxPrice){
         where.price ={};
         if(minPrice) where.price.gte = Number(minPrice);
         if(maxPrice) where.price.lte = Number(maxPrice);
     }
 
-    const orderBy: any = {};
-    if(sort === "price-low") orderBy.price = "asc";
-    else if(sort === "price-high") orderBy.price = "desc";
-    else orderBy.createdAt = "desc";
-   
-    const products = await prisma.product.findMany({
-        where,
-        orderBy,        
-    })
+    let orderBy: any = {};
+    switch (sort) {
+        case "price_asc":
+            orderBy = { price: "asc" };
+            break;
+        case "price_desc":
+            orderBy = { price: "desc" };
+            break;
+        case "rating":
+            orderBy = { rating: "desc" };
+            break;
+        case "name":
+            orderBy = { name: "asc" };
+            break;
+        default:
+            orderBy = { createdAt: "desc" };
+            break;
+    }
+
+    const pageNum = parseInt(page as string) || 1;
+    const limitNum = parseInt(limit as string) || 12;
+    const skip = (pageNum - 1) * limitNum;
+
+    const [products, totalCount] = await Promise.all([
+        prisma.product.findMany({
+            where,
+            orderBy,
+            skip,
+            take: limitNum,
+        }),
+        prisma.product.count({ where })
+    ]);
 
     const productsWithDiscount = products.map((product:any)=>{
         const discount = product.originalPrice && product.price ? Math.round(((product.originalPrice - product.price)/product.originalPrice)*100) : 0;
         return {...product, discount}
     })
 
-    res.json({products:productsWithDiscount})
+    res.json({
+        products: productsWithDiscount,
+        totalProducts: totalCount,
+        totalPages: Math.ceil(totalCount / limitNum),
+        currentPage: pageNum
+    })
 }
 
 // GET/api/products/:id
