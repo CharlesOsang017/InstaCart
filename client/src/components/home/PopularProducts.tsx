@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import type { Product } from "../../types";
-import { dummyProducts } from "../../assets/assets";
 import { Link } from "react-router-dom";
 import { ArrowRightIcon } from "lucide-react";
 import ProductCard from "../ProductCard";
+import api from "../../config/api";
 
 const PopularProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    setProducts(dummyProducts.slice(0, 10));
+    const fetchPopularProducts = async () => {
+      const response = await api.get(`/products?limit=10&sort=rating`);
+      setProducts(response.data.products);
+    };
+    fetchPopularProducts();
   }, []);
   return (
     <section className="pb-16">
