@@ -87,7 +87,7 @@ export const getProduct = async(req:Request, res:Response)=>{
         return res.status(404).json({message: "Product not found"})
     }
     const discount = product.originalPrice && product.price ? Math.round(((product.originalPrice - product.price)/product.originalPrice)*100) : 0;
-    res.json({...product, discount})
+    res.json({product: {...product, discount}})
 }
 
 // POST /api/products
