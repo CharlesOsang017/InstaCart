@@ -36,7 +36,7 @@ export const loginPartner = async(req: Request, res: Response)=>{
 
 // Get assigned deliveries
 export const getMyDeliveries = async(req: Request, res: Response)=>{
-    const {status} = req.body;
+    const {status} = req.query;
     const where: any = {deliveryPartnerId: req.partner!.id};
 
     if(status === "active"){
