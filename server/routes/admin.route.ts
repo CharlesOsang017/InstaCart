@@ -9,6 +9,6 @@ router.get("/stats", authMiddleware, adminMiddleware, getAdminStats);
 router.get("/delivery-partners", authMiddleware, adminMiddleware, getDeliveryPartners);
 router.post("/delivery-partners", authMiddleware, adminMiddleware, createDeliveryPartner);
 router.put("/delivery-partners/:id", authMiddleware, adminMiddleware, updateDeliveryPartner);
-router.post("/orders/:id/assign", authMiddleware, adminMiddleware, assignDeliveryPartner);
+router.put("/orders/:id/assign", authMiddleware, adminMiddleware, assignDeliveryPartner);
 
 export default router;
