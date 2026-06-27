@@ -18,7 +18,7 @@ export default function AdminOrders() {
     try {
       const {data} = await api.get("/orders/all")
       setOrders(data.orders)
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error?.response?.data?.message || error?.message)
     } finally {
       setLoading(false)

@@ -108,7 +108,7 @@ export default function DeliveryDashboard() {
       );
       toast.success(`Status updated to ${status}`);
       fetchOrders();
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error?.response?.data?.message || error?.message);
     }
   };
